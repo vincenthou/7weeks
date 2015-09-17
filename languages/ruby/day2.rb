@@ -108,3 +108,86 @@ puts arr.max { |a, b| b - a }
 puts arr.member?(7)
 puts arr.inject(0) {|sum ,i| sum + i} #Same like javascript reduce
 
+# Open file
+
+file = File.new('day1.rb', "r") # Or File.open
+file.each { |line|
+    puts line
+}
+file.close
+
+# Block pattern will close file automatically, errors will be collected
+File.open('day1.rb', "r") { |file|
+    file.each { |line|
+        puts line
+    }
+}
+
+# Array and hash map
+arr = [[:a, "apple"], [:b, "bear"]]
+hash = Hash[arr]
+puts hash
+arr = []
+hash.each {|key, value| arr.push(value)}
+puts arr
+hash = {}
+i = 0
+arr.each { |item| 
+    hash[i] = item
+    i = i + 1
+}
+puts hash
+
+# Stack
+arr = [1, 2, 3]
+arr.push(4)
+arr.pop()
+arr.pop()
+puts arr
+
+# List
+arr.shift()
+arr.push(3)
+puts arr
+
+# Set
+puts '--uniq--'
+arr.unshift(3)
+puts arr.uniq
+puts '-----'
+puts arr 
+
+# Group slice in array
+puts '--slice--'
+arr = []
+(1..16).each { |num|
+    if 0 != num % 4
+        arr.push(num)
+    else
+        p arr.push num
+        arr = []
+    end
+}
+
+(1..16).each_slice(4) { |slice|
+    p slice
+}
+
+def hash_to_array (hash)
+    arr = []
+    hash.each { |key, value|
+        arr.push (key)
+    }
+    arr
+end
+
+class Tree
+    def initialize(hash)
+        hash.each { |k, v|
+            @name = k
+            @children = map_to_array(v)
+        }
+    end
+end
+
+tree = Tree.new({'root' => {'left' => {}, {'left' => {}}}})
