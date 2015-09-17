@@ -173,21 +173,56 @@ arr = []
     p slice
 }
 
-def hash_to_array (hash)
-    arr = []
-    hash.each { |key, value|
-        arr.push (key)
-    }
-    arr
-end
-
+# Extend the Tree class lately
 class Tree
-    def initialize(hash)
-        hash.each { |k, v|
-            @name = k
-            @children = map_to_array(v)
+    def load(hash)
+        #hash.each { |k, v|
+        #    @name = k
+        #    @children = hash_to_array(v)
+        #}
+        root = hash_to_array(hash)
+        if 1 == root.length
+            # Can use it like this? this = root[0]
+            @name = root[0].name
+            @children = root[0].children
+        end
+    end
+
+    def hash_to_array (hash)
+        arr = []
+        hash.each { |key, value|
+            arr.push (Tree.new(key, hash_to_array(value)))
         }
+        arr
     end
 end
 
-tree = Tree.new({'root' => {'left' => {}, {'left' => {}}}})
+tree = Tree.new('')
+tree.load({
+    'root' => {
+        'left' => {
+            'lchild1' => {},
+            'lchild2' => {}
+        }, 
+        'right' => {
+            'rchild1' => {},
+            'rchild2' => {} 
+        }
+    }
+})
+
+tree.visit_all {|node| puts node.name}
+
+def find_line(str)
+    File.open('day1.rb') { |file|
+        i = 1
+        file.each { |line|
+            if line.include? str
+                puts i.to_s + ': ' + line
+            end
+            i = i + 1
+        }
+    }
+end
+puts '--find puts--'
+find_line('puts')
