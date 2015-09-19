@@ -177,21 +177,24 @@ module ActsAsCsv
         def read
             file = File.new("#{self.class.to_s.downcase}.csv")
             @headers = file.gets.chomp.split(',')
+            @lines = []
 
             file.each do |row|
-                @contents << row.chomp.split(',')
+                row = row.chomp.split(',')
+                @contents << row
+                line_map = {}
+                i = 0
+                @headers.each { |header|
+                    line_map[header] = row[i]
+                    i = i + 1 
+                }
+                @lines << Line.new(line_map)
             end
         end
 
         def each(&block)
-            @contents.each do |line|
-                line_map = {}
-                i = 0
-                headers.each { |header|
-                    line_map[header] = line[i]
-                    i = i + 1 
-                }
-                block.call(Line.new(line_map))
+            @lines.each do |line|
+                block.call(line)
             end
         end
 
