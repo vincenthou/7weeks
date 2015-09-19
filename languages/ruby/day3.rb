@@ -163,6 +163,16 @@ module ActsAsCsv
         end
     end
 
+    class Line
+        def initialize(map)
+            @map = map
+        end
+
+        def method_missing name
+            @map[name.to_s]
+        end
+    end
+
     module InstanceMethods
         def read
             file = File.new("#{self.class.to_s.downcase}.csv")
@@ -175,7 +185,13 @@ module ActsAsCsv
 
         def each(&block)
             @contents.each do |line|
-                block.call(line)
+                line_map = {}
+                i = 0
+                headers.each { |header|
+                    line_map[header] = line[i]
+                    i = i + 1 
+                }
+                block.call(Line.new(line_map))
             end
         end
 
@@ -198,4 +214,4 @@ puts '--Use module, include--'
 file = Member.new
 puts file.headers.inspect
 puts file.contents.inspect
-file.each {|row| puts row}
+file.each {|row| p row.name}
