@@ -10,13 +10,13 @@ Vehicle type //Default slot
 
 Car := Vehicle clone
 
-ferrari := Car
+ferrari := Car clone
 ferrari slotNames //No slots
 Ferrari := Car clone //Uppercase indicate a type
 Ferrari getSlot("type")
 
 method() type //Block type
-Car drive := method("Running", println)
+Car drive := method("Running" println)
 ferrari drive //Running
 
 Lobby //List all the named objects
@@ -43,3 +43,10 @@ true and 0 //true
 true proto
 false clone //false
 nil clone //nil
+
+//Singleton
+Calendar := Object clone
+Calendar clone := Calendar //Override the clone method 
+cal1 := Calendar clone
+cal2 := Calendar clone
+cal1 == cal2
